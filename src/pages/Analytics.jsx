@@ -1,9 +1,12 @@
-import React from 'react'
+import ExpenseChart from "../sections/ExpenseChart";
 
-const Analytics = () => {
-  return (
-    <div>Analytics</div>
-  )
+function Analytics() {
+    return (
+        <div>
+            <h2 className="text-2xl font-semibold mt-6 text-rose-700">Expense Analytics</h2>
+            <ExpenseChart />
+        </div>
+    );
 }
 
-export default Analytics
+export default Analytics;

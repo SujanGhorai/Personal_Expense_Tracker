@@ -4,7 +4,7 @@ import Layout from "./layout/Layout";
 import Analytics from "./pages/Analytics";
 import ExpenseHistory from "./sections/ExpenseHistory";
 import NotFoundPage from "./pages/NotFoundPage";
-import { ExpenseProvider } from "./context/context";
+import { ExpensesProvider } from "./context/context";
 
 function App() {
     // useEffect(() => {
@@ -24,7 +24,7 @@ function App() {
 
     return (
         <BrowserRouter>
-            <ExpenseProvider>
+            <ExpensesProvider>
                 <Routes>
                     <Route element={<Layout />}>
                         <Route path="/" element={<Analytics />} />
@@ -32,7 +32,7 @@ function App() {
                     </Route>
                     <Route path="*" element={<NotFoundPage />} />
                 </Routes>
-            </ExpenseProvider>
+            </ExpensesProvider>
         </BrowserRouter>
     );
 }

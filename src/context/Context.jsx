@@ -6,16 +6,13 @@ const initialState = {
     expenses: JSON.parse(localStorage.getItem("expenses")) || [],
     loading: false,
     error: null,
-    editingExpenses: null,
+    editingExpense: null,
 };
 
 const expensesReducer = (state, action) => {
     switch (action.type) {
         case "ADD_EXPENSE":
-            return {
-                ...state,
-                expenses: [...state.expenses, action.payload],
-            };
+            return { ...state, expenses: [...state.expenses, action.payload] };
 
         case "DELETE_EXPENSES":
             return {
@@ -29,44 +26,36 @@ const expensesReducer = (state, action) => {
                 expenses: state.expenses.map((e) =>
                     e.id === action.payload.id ? action.payload : e
                 ),
-                editingExpenses: null,
-            };
-
-        case "SET_EXPENSES":
-            return {
-                ...state,
-                expenses: action.payload,
-            };
-
-        case "SET_LOADING":
-            return {
-                ...state,
-                loading: action.payload,
-            };
-
-        case "SET_ERROR":
-            return {
-                ...state,
-                error: action.payload,
+                editingExpense: null,
             };
 
         case "SET_EDITING_EXPENSE":
             return {
                 ...state,
-                editingExpenses: action.payload,
+                editingExpense: action.payload,
             };
+
         case "CANCEL_EDIT":
             return {
                 ...state,
-                editingExpenses: null,
+                editingExpense: null,
             };
+
+        case "SET_EXPENSES":
+            return { ...state, expenses: action.payload };
+
+        case "SET_LOADING":
+            return { ...state, loading: action.payload };
+
+        case "SET_ERROR":
+            return { ...state, error: action.payload };
 
         default:
             return state;
     }
 };
 
-export const ExpenseProvider = ({ children }) => {
+export const ExpensesProvider = ({ children }) => {
     const [state, dispatch] = useReducer(expensesReducer, initialState);
 
     useEffect(() => {
@@ -77,10 +66,10 @@ export const ExpenseProvider = ({ children }) => {
         }
     }, [state.expenses]);
 
-    const vlaue = {
+    const value = {
         ...state,
 
-        addExpense: (expense) => {
+        addExpenses: (expense) => {
             const newExpense = {
                 ...expense,
                 id: crypto.randomUUID(),
@@ -92,8 +81,8 @@ export const ExpenseProvider = ({ children }) => {
             dispatch({ type: "DELETE_EXPENSES", payload: { id } });
         },
 
-        updateExpnse: (updateExpense) => {
-            dispatch({ type: "UPDATE_EXPENSES", payload: updateExpense });
+        updateExpense: (updatedExpense) => {
+            dispatch({ type: "UPDATE_EXPENSES", payload: updatedExpense });
         },
 
         setEditingExpense: (expense) => {
@@ -105,18 +94,14 @@ export const ExpenseProvider = ({ children }) => {
         },
     };
 
-    return <ExpenseContext.Provider value={vlaue}>{children}</ExpenseContext.Provider>;
+    return <ExpenseContext.Provider value={value}>{children}</ExpenseContext.Provider>;
 };
 
 export const useExpenses = () => {
     const context = useContext(ExpenseContext);
 
-    // if(context !== undefined) {
-
-    // }
-
     if (!context) {
-        throw new Error("useExpenses must be used with an ExpnseProvider.");
+        throw new Error("useExpenses must be used with an ExpenseProvider");
     }
 
     return context;

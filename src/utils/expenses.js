@@ -1,13 +1,15 @@
 export function formatCurrency(amount) {
+    const num = Number(amount) || 0;
     return new Intl.NumberFormat("en-US", {
         style: "currency",
         currency: "INR",
         maximumFractionDigits: 2,
-    }).format(amount);
+    }).format(num);
 }
 
 export function formatDate(dateString) {
     const date = new Date(dateString);
+    if (Number.isNaN(date.getTime())) return ""; // guard for invalid date
 
     return date.toLocaleDateString("en-US", {
         year: "numeric",
@@ -28,12 +30,15 @@ export function getExpensesByCategory(expenses) {
     };
 
     expenses.forEach((expense) => {
-        const cateogry = expense.cateogry ? expense.category.toLowerCase() : "other";
+        // fix typo and defensively read category
+        const category =
+            expense && expense.category ? String(expense.category).toLowerCase() : "other";
+        const amount = Number(expense.amount) || 0;
 
-        if (categories[cateogry] !== undefined) {
-            categories[cateogry] += Number(expense.amount);
+        if (categories[category] !== undefined) {
+            categories[category] += amount;
         } else {
-            categories["other"] += Number(expense.amount);
+            categories["other"] += amount;
         }
     });
 
@@ -41,7 +46,7 @@ export function getExpensesByCategory(expenses) {
 }
 
 export function getTotalExpenses(expenses) {
-    return expenses.reduce((total, expense) => total + Number(expense.amount), 0);
+    return expenses.reduce((total, expense) => total + (Number(expense.amount) || 0), 0);
 }
 
 export function getChartData(expenses) {
@@ -58,7 +63,7 @@ export function getChartData(expenses) {
 export function getCategoryTextColor(category) {
     const colors = {
         food: "text-indigo-500",
-        transport: "text-cayn-500",
+        transport: "text-cyan-500", // fixed typo 'cayn' -> 'cyan'
         entertainment: "text-purple-500",
         shopping: "text-orange-500",
         utilities: "text-teal-500",
@@ -66,12 +71,15 @@ export function getCategoryTextColor(category) {
         health: "text-green-500",
     };
 
-    const safeCategory = category ? category.toLowerCase() : "other";
+    const safeCategory = category ? String(category).toLowerCase() : "other";
     return colors[safeCategory] || "text-gray-500";
 }
 
 export function getMonthName(date) {
-    return date.toLocaleDateString("default", { month: "long" });
+    // accept Date or parsable string
+    const d = date instanceof Date ? date : new Date(date);
+    if (Number.isNaN(d.getTime())) return "";
+    return d.toLocaleDateString("default", { month: "long" });
 }
 
 export function getExpensesMonth(expenses, numMonth = 6) {
@@ -86,10 +94,12 @@ export function getExpensesMonth(expenses, numMonth = 6) {
 
     expenses.forEach((exp) => {
         const expenseDate = new Date(exp.date);
-        const montYear = `${getMonthName(expenseDate)} ${expenseDate.getFullYear()}`;
+        if (Number.isNaN(expenseDate.getTime())) return;
 
-        if (result[montYear] !== undefined) {
-            result[montYear] += Number(exp.amount);
+        const monthYear = `${getMonthName(expenseDate)} ${expenseDate.getFullYear()}`;
+
+        if (result[monthYear] !== undefined) {
+            result[monthYear] += Number(exp.amount) || 0;
         }
     });
 
