@@ -4,7 +4,7 @@ import Layout from "./layout/Layout";
 import Analytics from "./pages/Analytics";
 import ExpenseHistory from "./sections/ExpenseHistory";
 import NotFoundPage from "./pages/NotFoundPage";
-import { ExpensesProvider } from "./context/context";
+import { ExpensesProvider } from "./context/Context";
 
 function App() {
     // useEffect(() => {

@@ -1,6 +1,6 @@
 import { TrendingDown, TrendingUp, Wallet } from "lucide-react";
 import { formatCurrency, getExpensesByCategory, getTotalExpenses } from "../utils/expenses";
-import { useExpenses } from "../context/context";
+import { useExpenses } from "../context/Context";
 
 function ExpenseSummary() {
     const { expenses } = useExpenses();

@@ -1,6 +1,6 @@
 import ExpensesBarChart from "../components/ExpensesBarChart";
 import ExpensesPieChart from "../components/ExpensesPieChart";
-import { useExpenses } from "../context/context";
+import { useExpenses } from "../context/Context";
 import { getChartData, getExpensesMonth } from "../utils/expenses";
 import { BarChart as BarIcon, PieChart as PieIcon } from "lucide-react";
 

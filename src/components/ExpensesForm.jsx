@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { X } from "lucide-react";
 import toast from "react-hot-toast";
-import { useExpenses } from "../context/context";
+import { useExpenses } from "../context/Context";
 
 export default function ExpensesForm({ onClose }) {
     const { addExpenses } = useExpenses();
